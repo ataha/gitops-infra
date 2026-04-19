@@ -1,0 +1,11 @@
+# apps/kasten/values.yaml
+eula:
+  accept: true
+  company: "Your Company"
+  email: "you@yourcompany.com"
+
+# Token-based auth for the dashboard (simplest to start)
+auth:
+  tokenAuth:
+    enabled: true
+
