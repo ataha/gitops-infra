@@ -1,9 +1,11 @@
-# apps/kasten-config/policy-postgresql.yaml
+# apps/postgresql/policy-postgresql.yaml
 apiVersion: config.kio.kasten.io/v1alpha1
 kind: Policy
 metadata:
   name: postgresql-backup
   namespace: postgresql
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
 spec:
   comment: ""
   frequency: "@hourly"

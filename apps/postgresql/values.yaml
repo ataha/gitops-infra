@@ -1,0 +1,32 @@
+# apps/postgresql/values.yaml
+
+# Use our pre-created sealed secret instead of chart-generated passwords
+auth:
+  existingSecret: postgres-credentials
+  database: appdb
+  username: appuser
+  # postgres-password, password, and replication-password keys are read
+  # from the secret automatically
+
+architecture: standalone
+
+primary:
+  persistence:
+    enabled: true
+    storageClass: do-block-storage        # DOKS default
+    size: 8Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Expose inside the cluster only
+service:
+  type: ClusterIP
+
+# POC — disable metrics sidecar for simplicity
+metrics:
+  enabled: false
