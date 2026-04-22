@@ -1,0 +1,40 @@
+# apps/kasten-config/policy-postgresql.yaml
+apiVersion: config.kio.kasten.io/v1alpha1
+kind: Policy
+metadata:
+  name: postgresql-backup
+  namespace: postgresql
+  annotations:
+    argocd.argoproj.io/sync-wave: "50"
+spec:
+  comment: ""
+  frequency: "@hourly"
+  paused: false
+  actions:
+    - action: backup
+    - action: export
+      exportParameters:
+        frequency: "@hourly"
+        profile:
+          name: k10-backups
+          namespace: kasten-io
+        exportData:
+          enabled: true
+      retention:
+        hourly: 0
+        daily: 0
+        weekly: 0
+        monthly: 0
+        yearly: 0
+  retention:
+    hourly: 24
+    daily: 7
+    weekly: 4
+    monthly: 12
+    yearly: 7
+  selector:
+    matchExpressions:
+      - key: k10.kasten.io/appNamespace
+        operator: In
+        values:
+          - postgresql
