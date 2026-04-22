@@ -1,26 +1,19 @@
-# apps/kasten/application.yaml
+# apps/kasten-config/application.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kasten-k10
+  name: kasten-config
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  sources:
-    # Source 1: the Kasten Helm chart
-    - repoURL: https://charts.kasten.io/
-      chart: k10
-      targetRevision: 8.0.1   # pin; check artifacthub.io/packages/helm/kasten/k10 for current
-      helm:
-        releaseName: k10
-        valueFiles:
-          - $values/apps/kasten/values.yaml
-    # Source 2: your Git repo, mounted as $values so the helm source can read values.yaml from it
-    - repoURL: https://github.com/ataha/gitops-infra.git
-      targetRevision: main
-      ref: values
+  source:
+    repoURL: https://github.com/ataha/gitops-infra.git
+    targetRevision: main
+    path: apps/kasten-config
+    directory:
+      recurse: false
   destination:
     server: https://kubernetes.default.svc
     namespace: kasten-io
@@ -29,5 +22,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true
       - ServerSideApply=true

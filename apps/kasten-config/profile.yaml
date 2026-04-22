@@ -1,0 +1,24 @@
+# apps/kasten-config/profile.yaml
+apiVersion: config.kio.kasten.io/v1alpha1
+kind: Profile
+metadata:
+  name: k10-backups
+  namespace: kasten-io
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
+spec:
+  type: Location
+  locationSpec:
+    credential:
+      secretType: AwsAccessKey
+      secret:
+        apiVersion: v1
+        kind: Secret
+        name: k10-backups-secret
+        namespace: kasten-io
+    type: ObjectStore
+    objectStore:
+      name: ahmed-location     # your bucket name
+      objectStoreType: S3
+      region: eu-west-1                # your bucket's region
+      # no 'endpoint' needed for real AWS S3 — Kasten uses the default AWS endpoint

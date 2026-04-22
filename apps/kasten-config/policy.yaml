@@ -1,0 +1,41 @@
+# apps/kasten-config/policy.yaml
+apiVersion: config.kio.kasten.io/v1alpha1
+kind: Policy
+metadata:
+  name: k10-disaster-recovery-policy
+  namespace: kasten-io
+  annotations:
+    argocd.argoproj.io/sync-wave: "50"
+spec:
+  actions:
+    - action: backup
+      backupParameters:
+        filters: {}
+        profile:
+          name: k10-backups
+          namespace: kasten-io
+    - action: export
+      exportParameters:
+        exportData:
+          enabled: true
+        frequency: '@hourly'
+        profile:
+          name: k10-backups
+          namespace: kasten-io
+      retention: {}
+  frequency: '@hourly'
+  kdrSnapshotConfiguration:
+    exportCatalogSnapshot: true
+    takeLocalCatalogSnapshot: true
+  retention:
+    daily: 1
+    hourly: 4
+    monthly: 1
+    weekly: 1
+    yearly: 1
+  selector:
+    matchExpressions:
+      - key: k10.kasten.io/appNamespace
+        operator: In
+        values:
+          - kasten-io
