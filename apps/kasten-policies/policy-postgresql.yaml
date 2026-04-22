@@ -4,8 +4,6 @@ kind: Policy
 metadata:
   name: postgresql-backup
   namespace: postgresql
-  annotations:
-    argocd.argoproj.io/sync-wave: "50"
 spec:
   comment: ""
   frequency: "@hourly"
