@@ -12,7 +12,7 @@ spec:
     # Source 1: the Kasten Helm chart
     - repoURL: https://charts.kasten.io/
       chart: k10
-      targetRevision: 8.5.3   # pin; check artifacthub.io/packages/helm/kasten/k10 for current
+      targetRevision: 8.5.6  # pin; check artifacthub.io/packages/helm/kasten/k10 for current
       helm:
         releaseName: k10
         valueFiles:
