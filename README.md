@@ -98,31 +98,6 @@ curl https://docs.kasten.io/tools/k10_primer.sh | bash
 
 ---
 
-## Bootstrap
-
-Run once to register all Applications with ArgoCD. After this, ArgoCD manages everything.
-
-```bash
-# 1. Sealed Secrets controller (must be first)
-kubectl apply -f apps/sealed-secrets/application.yaml
-
-# 2. Wait for the controller to be ready before creating any SealedSecrets
-kubectl -n kube-system rollout status deployment/sealed-secrets
-
-# 3. Kasten K10
-kubectl apply -f apps/kasten/application.yaml
-
-# 4. Kasten configuration (profile, DR policy, credentials)
-kubectl apply -f apps/kasten-config/application.yaml
-
-# 5. PostgreSQL
-kubectl apply -f apps/postgresql/application.yaml
-```
-
-From this point on, every change goes through Git. Push a commit, ArgoCD reconciles it.
-
----
-
 ## Adding or Rotating Secrets
 
 Never commit plaintext secrets. All secrets are encrypted with Sealed Secrets before committing.
@@ -188,6 +163,32 @@ git add apps/postgresql/sealed-postgres-secret.yaml
 git commit -m "Rotate PostgreSQL credentials"
 git push
 ```
+
+
+---
+
+## Bootstrap
+
+Run once to register all Applications with ArgoCD. After this, ArgoCD manages everything.
+
+```bash
+# 1. Sealed Secrets controller (must be first)
+kubectl apply -f apps/sealed-secrets/application.yaml
+
+# 2. Wait for the controller to be ready before creating any SealedSecrets
+kubectl -n kube-system rollout status deployment/sealed-secrets
+
+# 3. Kasten K10
+kubectl apply -f apps/kasten/application.yaml
+
+# 4. Kasten configuration (profile, DR policy, credentials)
+kubectl apply -f apps/kasten-config/application.yaml
+
+# 5. PostgreSQL
+kubectl apply -f apps/postgresql/application.yaml
+```
+
+From this point on, every change goes through Git. Push a commit, ArgoCD reconciles it.
 
 ---
 
