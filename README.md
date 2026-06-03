@@ -145,6 +145,31 @@ git commit -m "Rotate S3 credentials"
 git push
 ```
 
+### Rotate k10 DR credentials
+
+
+```bash
+# Generate a strong passphrase and save it in your password manager FIRST
+PASS=$(openssl rand -base64 32)
+echo $PASS   # copy this to your password manager NOW
+ 
+kubectl create secret generic k10-dr-secret \
+  --namespace kasten-io \
+  --from-literal key="$PASS" \
+  --dry-run=client -o yaml \
+| kubeseal --format=yaml \
+    --controller-namespace=kube-system \
+    --controller-name=sealed-secrets \
+> apps/kasten-config/sealed-dr-secret.yaml
+
+git add apps/kasten-config/sealed-dr-secret.yaml
+git commit -m "Rotate S3 credentials"
+git push
+
+```
+
+
+
 ### Rotate the PostgreSQL password
 
 ```bash
